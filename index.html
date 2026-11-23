@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <title>СТАНЬ МАГНАТОМ</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="game-wrapper">
+            <!-- Главное меню / Выбор миров -->
+            <div id="mainMenu" class="screen">
+                <h1>🏢 СТАНЬ МАГНАТОМ</h1>
+                <p>Выберите мир для прохождения. Следующие миры разблокируются после прохождения предыдущих!</p>
+                
+                <div class="worlds-container">
+                    <!-- Мир 1 -->
+                    <div class="world-card" id="worldCard0">
+                        <h3>🌍 Мир 1: Стартап</h3>
+                        <p>Старт: 300$ | Цель: 1qa$<br>Мест: до 100 (9 уровней)</p>
+                        <button class="btn" id="worldBtn0" onclick="selectWorld(0)">▶ Играть</button>
+                    </div>
+                    <!-- Мир 2 -->
+                    <div class="world-card locked" id="worldCard1">
+                        <h3>🪐 Мир 2: Корпорация</h3>
+                        <p>Старт: 1M$ | Цель: 500qi$<br>Мест: до 100 (14 уровней)</p>
+                        <button class="btn locked-btn" id="worldBtn1" onclick="selectWorld(1)">🔒 Закрыто</button>
+                    </div>
+                    <!-- Мир 3 -->
+                    <div class="world-card locked" id="worldCard2">
+                        <h3>🌌 Мир 3: Кибер-Империя</h3>
+                        <p>Старт: 10M$ | Цель: 50sx$<br>Мест: до 100 (14 уровней)</p>
+                        <button class="btn locked-btn" id="worldBtn2" onclick="selectWorld(2)">🔒 Закрыто</button>
+                    </div>
+                    <!-- Мир 4 -->
+                    <div class="world-card locked" id="worldCard3">
+                        <h3>⚡ Мир 4: Квантовая Сеть</h3>
+                        <p>Старт: 100M$ | Цель: 20sp$<br>Мест: до 100 (14 уровней)</p>
+                        <button class="btn locked-btn" id="worldBtn3" onclick="selectWorld(3)">🔒 Закрыто</button>
+                    </div>
+                    <!-- Мир 5 -->
+                    <div class="world-card locked" id="worldCard4">
+                        <h3>👑 Мир 5: Метавселенная</h3>
+                        <p>Старт: 1B$ | Цель: 8oc$<br>Мест: до 100 (14 уровней)</p>
+                        <button class="btn locked-btn" id="worldBtn4" onclick="selectWorld(4)">🔒 Закрыто</button>
+                    </div>
+                </div>
+
+                <!-- Кнопка сброса прогресса -->
+                <button class="action-btn reset-global-btn" onclick="resetSaveData()">🔄 Сбросить весь прогресс</button>
+            </div>
+
+            <!-- Игровой экран -->
+            <div id="gameScreen" class="screen hidden">
+                <header>
+                    <div class="top-left">
+                        <h1 id="worldTitle">🏢 Стартап</h1>
+                        <span class="sub-timer">⏱️ Время: <strong id="timer">00:00</strong> | ⏳ Общее: <strong id="totalTimer">00:00</strong></span>
+                    </div>
+                    <!-- Цель игры посередине сверху -->
+                    <div class="goal-banner">
+                        🎯 Цель: <span id="goalText">1qa$</span>
+                    </div>
+                    <div class="stats-bar">
+                        <span>💵 Бюджет: <strong id="money">300</strong> $</span>
+                        <span>👥 Штат: <strong id="staffCount">0</strong>/<strong id="maxDesks">10</strong></span>
+                        <span>📈 Доход: <strong id="income">0</strong> $/с</span>
+                        <span>⭐ Ур: <strong id="officeTier">1</strong>/<span id="maxTierText">10</span></span>
+                    </div>
+                </header>
+
+                <div class="game-arena" id="gameArenaBg">
+                    <canvas id="gameCanvas" width="620" height="440"></canvas>
+
+                    <!-- Окно магазина (Биржа труда) -->
+                    <div id="hireModal" class="modal hidden">
+                        <div class="modal-header">
+                            <h2>👔 Биржа Труда</h2>
+                            <button id="closeHire">✖</button>
+                        </div>
+                        <div class="modal-list" id="hireList"></div>
+                    </div>
+
+                    <!-- Окно управления столом -->
+                    <div id="deskModal" class="modal hidden">
+                        <div class="modal-header">
+                            <h2>💻 Управление рабочим местом</h2>
+                            <button id="closeDesk">✖</button>
+                        </div>
+                        <div class="modal-body" id="deskBody"></div>
+                    </div>
+
+                    <!-- Экран Победы -->
+                    <div id="winModal" class="modal hidden win-modal-content">
+                        <h2>🎉 ПОБЕДА В МИРЕ!</h2>
+                        <p id="winDesc">Ты достиг цели и открыл следующий мир!</p>
+                        <p class="win-stat">Время мира: <strong id="finalTime">00:00</strong></p>
+                        <p class="win-stat">Общее время: <strong id="finalTotalTime">00:00</strong></p>
+                        <button class="action-btn" onclick="returnToMenu()">🗺️ К выбору миров</button>
+                    </div>
+                </div>
+
+                <!-- Нижняя панель с читами и кнопкой выхода в меню -->
+                <div class="bottom-panel">
+                    <div class="cheat-bar">
+                        <input type="text" id="cheatInput" placeholder="Чит (GOD, RICH, MAX, SKIP)..." autocomplete="off" />
+                        <button id="cheatBtn">OK</button>
+                    </div>
+                    <button class="action-btn danger-btn" id="exitMenuBtn">🚪 В меню</button>
+                </div>
+
+                <footer>
+                    <p><strong>W, A, S, D</strong> — ходьба | <strong>ПРОБЕЛ</strong> — Магазин / Покупка / Автопрокачка | <strong>SHIFT</strong> — Уволить</p>
+                </footer>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
